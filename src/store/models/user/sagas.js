@@ -1,32 +1,19 @@
 import React from 'react';
-import {
-  all,
-  call,
-  takeLatest,
-  put,
-  delay,
-  fork,
-} from 'redux-saga/effects';
-
+import {all, call, takeLatest, put, delay, fork} from 'redux-saga/effects';
 
 import api from '../../../services/api';
 
-import {
-   UserTypes,
-   allUser,
-   allUserSucesso,
- } from './actions';
+import {UserTypes, allUser, allUserSucesso} from './actions';
 
-export function* usuario({  }) {
- 
-  const response = yield call(api, 'post', '', {});
+export function* usuario({}) {
+  const response = yield call(api, 'get', '', {});
 
-  const { data, status } = response;
+  const {data, status} = response;
 
   switch (status) {
     case 200:
       // eslint-disable-next-line no-case-declarations
-      const { dados } = data;
+      const {dados} = data;
       yield put(allUserSucesso(dados));
       yield delay(50);
       break;
@@ -44,8 +31,4 @@ export function* usuario({  }) {
   }
 }
 
-
-
-export default all([
-  takeLatest(UserTypes.GET_ALL_USER_INFO_REQUEST, usuario),
-]);
+export default all([takeLatest(UserTypes.GET_ALL_USER_INFO_REQUEST, usuario)]);

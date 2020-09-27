@@ -6,21 +6,21 @@ export const UserTypes = {
 
 export function allUser() {
   return {
-    type: UserTypes. GET_ALL_USER_INFO_REQUEST,
-    payload: { id, name, email},
+    type: UserTypes.GET_ALL_USER_INFO_REQUEST,
+    payload: {},
   };
 }
 
-export function allUserSucesso() {
+export function allUserSucesso(dados) {
   return {
     type: UserTypes.GET_ALL_USER_INFO_REQUEST_SUCCESS,
-    payload: { id, name, email },
+    payload: {dados},
   };
 }
 
 export function allUserFailure() {
   return {
     type: UserTypes.GET_ALL_USER_INFO_REQUEST_FAILURE,
-    payload: {  },
+    payload: {},
   };
 }

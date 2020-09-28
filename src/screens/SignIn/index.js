@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   Container,
   InputArea,
@@ -15,18 +15,55 @@ import SignInput from '../../componests/SignInput';
 import EmailIcon from '../../assets/email.svg';
 import LookIcon from '../../assets/lock.svg';
 import {loginRequest} from '../../store/models/auth/actions';
+import  AsyncStorage  from '@react-native-community/async-storage';
 
 export default () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [emailField, setEmailField] = useState('');
   const [passwordField, setPasswordField] = useState('');
+  const [token, setToken] = useState();
+
+  const user = useSelector((state) => state.user);
+  const {authenticated} = useSelector((state) => state.auth);
+ 
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if(value !== null){
+        console.log('token:'+value)
+        setToken(value);
+      }      
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  
+  /* useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token != null) {
+        
+      } else {
+        navigation.navigate('SignIn');
+      }
+    };
+    checkToken();
+  }, [user]); */
+  
+  
 
   const handleSignClick = () => {
     if (!emailField || !passwordField) {
       alert('preencha todos os campos!');
     } else {
       dispatch(loginRequest((email_cpf = emailField), (senha = passwordField)));
+      if(authenticated){
+        //setLoginLocal('wesllen');
+        getData();
+        console.log(token)
+      }
     }
   };
   const handleMessageButtonClick = () => {

@@ -18,10 +18,10 @@ export function loginRequest(email_cpf, senha) {
   };
 }
 
-export function loginSucesso(token, usuario, expira_em) {
+export function loginSucesso(access_token, usuario, expira_em) {
   return {
     type: AuthTypes.LOGIN_SUCESSO,
-    payload: { token, usuario, expira_em },
+    payload: { access_token, usuario, expira_em },
   };
 }
 

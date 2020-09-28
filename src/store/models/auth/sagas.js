@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   all,
   call,
@@ -29,14 +30,19 @@ export function* login({payload}) {
     senha,
   });
 
-  //console.log(response);
-
-  // const {data, status} = response;
-
-  /* switch (status) {
+  const {data, status} = response;
+  switch (status) {
     case 200: // eslint-disable-next-line no-case-declarations
       const {dados} = data;
-      yield put(loginSucesso(dados.token, dados.usuario, dados.expira_em));
+      const setLoginLocal = async (loginData) => {
+        try {
+          await AsyncStorage.setItem('token', loginData);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      setLoginLocal(dados.access_token);     
+      yield put(loginSucesso(dados.access_token, dados.usuario, dados.expires_in));
       break;
 
     case 401:
@@ -49,7 +55,7 @@ export function* login({payload}) {
 
     default:
       yield put();
-  } */
+  } 
 }
 
 export function* logout({payload}) {

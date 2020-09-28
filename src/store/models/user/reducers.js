@@ -1,14 +1,10 @@
 import produce from 'immer';
 
 import {UserTypes} from './actions';
+import { AuthTypes } from '../auth/actions';
 
 const INITIAL_STATE = {
-  id: '',
-  name: '',
-  email: '',
-  avatar: '',
-  favorites: [],
-  appointments: [],
+  dados: null,
   token: null,
   erro: null,
 };
@@ -16,6 +12,10 @@ const INITIAL_STATE = {
 export default function user(state = INITIAL_STATE, action) {
   return produce(state, (draft) => {
     switch (action.type) {
+      case AuthTypes.LOGIN_SUCESSO: {
+        draft.dados = action.payload.usuario;
+        break;
+      }
       case UserTypes.GET_ALL_USER_INFO_REQUEST: {
         break;
       }

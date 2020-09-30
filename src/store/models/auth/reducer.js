@@ -13,10 +13,14 @@ const INITIAL_STATE = {
 export default function auth(state = INITIAL_STATE, action) {
   return produce(state, (draft) => {
     switch (action.type) {
+      case AuthTypes.LOGIN_REQUEST: {
+        draft.loading = true;
+      }
       case AuthTypes.LOGIN_SUCESSO: {
         draft.token = action.payload.access_token;
         draft.authenticated = true;
         draft.expira_em = action.payload.expira_em;
+        draft.loading = false;
         break;
       }
       case AuthTypes.LOGOUT_REQUEST: {

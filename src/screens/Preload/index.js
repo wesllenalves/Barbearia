@@ -9,11 +9,13 @@ import {useDispatch, useSelector} from 'react-redux';
 export default () => {
   const navigation = useNavigation();
   const user = useSelector((state) => state.user);
+  const access_token = useSelector((state) => state.auth);
   useEffect(() => {
     const checkToken = async () => {
-      const token = await AsyncStorage.getItem('token');
-      if (token !== null) {
-        //validar token
+      const token = null;
+      //const token = await AsyncStorage.getItem('token');
+      if (token !== null) {        //validar token
+        
         alert('existe token')
       } else {
         navigation.navigate('SignIn');

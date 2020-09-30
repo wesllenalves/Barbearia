@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   Container,
   InputArea,
@@ -14,14 +15,26 @@ import SignInput from '../../componests/SignInput';
 import EmailIcon from '../../assets/email.svg';
 import LookIcon from '../../assets/lock.svg';
 import PersonIcon from '../../assets/person.svg';
+import {cadastroRequest} from '../../store/models/register/actions';
 
 export default () => {
+
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const [emailField, setEmailField] = useState('');
   const [passwordField, setPasswordField] = useState('');
   const [nomeField, setNomeField] = useState('');
 
-  const handleSignClick = () => {};
+  const handleSignUpClick = () => {
+    if (!emailField || !passwordField || !nomeField) {
+      alert('preencha todos os campos!');
+    } else {
+      dispatch(cadastroRequest((email = emailField), (password = passwordField), (name = nomeField)));
+      
+    }
+  };
+
   const handleMessageButtonClick = () => {
     navigation.reset({
       routes: [{name: 'SignIn'}],
@@ -53,7 +66,7 @@ export default () => {
           password={true}
         />
 
-        <CustomButton onPress={handleSignClick}>
+        <CustomButton onPress={handleSignUpClick}>
           <CustomButtonText>CADASTRAR</CustomButtonText>
         </CustomButton>
       </InputArea>

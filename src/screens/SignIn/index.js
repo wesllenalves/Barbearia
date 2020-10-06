@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
+import { ActivityIndicator } from "react-native";
 import {
   Container,
   InputArea,
@@ -25,45 +26,15 @@ export default () => {
   const [token, setToken] = useState();
 
   const user = useSelector((state) => state.user);
-  const {authenticated} = useSelector((state) => state.auth);
+  const {loading} = useSelector((state) => state.auth);
  
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('token');
-      if(value !== null){
-        console.log('token:'+value)
-        setToken(value);
-      }      
-    } catch (error) {
-      console.log(error)
-    }
-  };
-
-  
-  /* useEffect(() => {
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem('token');
-      if (token != null) {
-        
-      } else {
-        navigation.navigate('SignIn');
-      }
-    };
-    checkToken();
-  }, [user]); */
-  
-  
 
   const handleSignClick = () => {
     if (!emailField || !passwordField) {
       alert('preencha todos os campos!');
     } else {
       dispatch(loginRequest((email_cpf = emailField), (senha = passwordField)));
-      if(authenticated){
-        //setLoginLocal('wesllen');
-        getData();
-        console.log(token)
-      }
+      
     }
   };
   const handleMessageButtonClick = () => {
@@ -92,7 +63,11 @@ export default () => {
         />
 
         <CustomButton onPress={handleSignClick}>
-          <CustomButtonText>LOGIN</CustomButtonText>
+          <CustomButtonText>
+          {
+            loading ? <ActivityIndicator size="large" color="#ffff"/> : "LOGIN"
+          }          
+          </CustomButtonText>
         </CustomButton>
       </InputArea>
       <SignMessageButton onPress={handleMessageButtonClick}>

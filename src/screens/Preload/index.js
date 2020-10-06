@@ -1,22 +1,37 @@
 import React, {useEffect} from 'react';
 import {Container, LoadingIcon} from './styled';
+import { store } from '../../store/index';
 import BarberLogo from '../../assets/barber.svg';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
 
 import {useDispatch, useSelector} from 'react-redux';
+import api, { http } from '../../services/api';
+import {tokenRequest} from '../../store/models/auth/actions';
 
 export default () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const user = useSelector((state) => state.user);
   const access_token = useSelector((state) => state.auth);
   useEffect(() => {
+
+    function autoRefreshAlterarSenhaTokenJWT() {
+      const { authenticated } = store.getState().auth;
+      if (authenticated) {
+            
+          } else {
+            /* store.dispatch(
+              logoutRequest('Sessão expirada', 'Faça login novamente.')
+            ); */
+            
+          }
+    }
+
     const checkToken = async () => {
-      const token = null;
-      //const token = await AsyncStorage.getItem('token');
-      if (token !== null) {        //validar token
-        
-        alert('existe token')
+      const token = await AsyncStorage.getItem('token');
+      if (token) {        //validar token
+        dispatch(tokenRequest());
       } else {
         navigation.navigate('SignIn');
       }

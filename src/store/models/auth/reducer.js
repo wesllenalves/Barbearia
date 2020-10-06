@@ -4,10 +4,10 @@ import {AuthTypes} from './actions';
 
 const INITIAL_STATE = {
   token: null,
-  authenticated: false,
-  loading: false,
+  authenticated: false,  
   expira_em: 60,
   alterar_senha: false,
+  loading: false,
 };
 
 export default function auth(state = INITIAL_STATE, action) {
@@ -20,6 +20,10 @@ export default function auth(state = INITIAL_STATE, action) {
         draft.token = action.payload.access_token;
         draft.authenticated = true;
         draft.expira_em = action.payload.expira_em;
+        draft.loading = false;
+        break;
+      }
+      case AuthTypes.LOGIN_FAILURE: {        
         draft.loading = false;
         break;
       }

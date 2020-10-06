@@ -4,6 +4,7 @@ import { ToastAndroid} from "react-native";
 //import { store } from '../../index';
 import api, { http } from '../../../services/api';
 import ListErrosValidation from '../../../componests/ListErrorsValidation';
+import * as RootNavigation from '../../../RootNavigation';
 //import history from '~/services/history';
 //import ListErrosValidation from '~/components/ListErrorsValidation';
 
@@ -33,10 +34,15 @@ export function* cadastrar({ payload }) {
 
   if (status === 200) {
     const { mensagem, dados } = data;
-    console.log('cadastrou:'+dados)
-    alert('cadastrado com sucesso')     
-    
-    //yield put(cadastroSucesso(dados));
+    ToastAndroid.showWithGravityAndOffset(      
+      'Cadastro realizado com sucesso',
+      ToastAndroid.LONG,
+      ToastAndroid.TOP,
+      25,
+      50
+    );
+    yield put(cadastroSucesso(dados));
+    RootNavigation.navigate('SignIn');
     
   } else if (status === 422) {
     const { dados } = data;

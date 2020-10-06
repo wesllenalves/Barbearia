@@ -1,6 +1,7 @@
 export const AuthTypes = {
   LOGIN_REQUEST: '@auth/LOGIN_REQUEST',
   LOGIN_SUCESSO: '@auth/LOGIN_SUCESSO',
+  LOGIN_FAILURE: '@auth/LOGIN_FAILURE',
   LOGOUT_REQUEST: '@auth/LOGOUT_REQUEST',
   ALTERAR_SENHA_REQUEST: '@auth/ALTERAR_SENHA_REQUEST',
   CONFIRMA_SENHA_REQUEST: '@auth/CONFIRMA_SENHA_REQUEST',
@@ -8,6 +9,7 @@ export const AuthTypes = {
   CRIAR_SENHA_NOVA_REQUEST: '@auth/CRIAR_SENHA_NOVA_REQUEST',
   CRIAR_SENHA_NOVA_SUCESSO: '@auth/CRIAR_SENHA_NOVA_SUCESSO',
   DESATIVAR_LOADING: '@auth/DESATIVAR_LOADING',
+  TOKEN_RENOVAR_REQUEST: '@auth/TOKEN_RENOVAR_REQUEST',
   TOKEN_SUCESSO: '@auth/TOKEN_SUCESSO',
 };
 
@@ -15,6 +17,13 @@ export function loginRequest(email_cpf, senha) {
   return {
     type: AuthTypes.LOGIN_REQUEST,
     payload: { email_cpf, senha },
+  };
+}
+
+export function loginFailure() {
+  return {
+    type: AuthTypes.LOGIN_FAILURE,
+    payload: {  },
   };
 }
 
@@ -73,6 +82,13 @@ export function mudarSenhaSucesso(usuario) {
 export function desligarLoading() {
   return {
     type: AuthTypes.DESATIVAR_LOADING,
+  };
+}
+
+export function tokenRequest(token) {
+  return {
+    type: AuthTypes.TOKEN_RENOVAR_REQUEST,
+    payload: { token },    
   };
 }
 

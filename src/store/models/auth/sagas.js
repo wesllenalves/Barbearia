@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
+import { ToastAndroid} from "react-native";
+import * as RootNavigation from '../../../RootNavigation';
 import {
   all,
   call,
@@ -11,7 +13,7 @@ import {
   fork,
 } from 'redux-saga/effects';
 
-import api from '../../../services/api';
+import api, { http } from '../../../services/api';
 
 import {
   AuthTypes,
@@ -19,6 +21,7 @@ import {
   confirmSucessoToken,
   mudarSenhaSucesso,
   desligarLoading,
+  loginFailure,
   logoutRequest,
   tokenSucesso,
 } from './actions';
@@ -31,9 +34,10 @@ export function* login({payload}) {
   });
 
   const {data, status} = response;
+  const {dados} = data;
   switch (status) {
     case 200: // eslint-disable-next-line no-case-declarations
-      const {dados} = data;
+      
       const setLoginLocal = async (loginData) => {
         try {
           await AsyncStorage.setItem('token', loginData);
@@ -43,18 +47,37 @@ export function* login({payload}) {
       };
       setLoginLocal(dados.access_token);     
       yield put(loginSucesso(dados.access_token, dados.usuario, dados.expires_in));
+      //RootNavigation.navigate('SignIn');      
       break;
 
     case 401:
-      yield put();
+      /* ToastAndroid.showWithGravityAndOffset(      
+        `${Object.keys(dados).map((item, index) => (
+          dados[item]+'\n'
+        ))}`,
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        25,
+        50
+      ); */
+      yield put(loginFailure());
       break;
 
     case 403:
-      yield put();
+      /* ToastAndroid.showWithGravityAndOffset(      
+        `${Object.keys(dados).map((item, index) => (
+          dados[item]+'\n'
+        ))}`,
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        25,
+        50
+      ); */
+      yield put(loginFailure());
       break;
 
-    default:
-      yield put();
+    default:      
+      yield put(loginFailure());
   } 
 }
 
@@ -124,10 +147,30 @@ export function* alterarSenha({payload}) {
   yield put();
 }
 
+export function* tokenRequest({payload}) { 
+  const {token} = payload;
+  const response = yield call(api, 'get', 'auth/renovar', {});
+
+  const {data, status} = response;
+  switch (status) {
+    case 200:
+      yield put(confirmSucessoToken(data.dados.token, data.dados.usuario));
+      RootNavigation.navigate('MainTab');
+      break;
+    case 401:
+      RootNavigation.navigate('SignIn');
+      break;
+
+    default:
+      yield put();
+  }
+}
+
 export default all([
   takeLatest(AuthTypes.LOGIN_REQUEST, login),
   takeLatest(AuthTypes.LOGOUT_REQUEST, logout),
   takeLatest(AuthTypes.CONFIRMA_SENHA_REQUEST, confirmResetarSenha),
   takeLatest(AuthTypes.ALTERAR_SENHA_REQUEST, resetarSenha),
   takeLatest(AuthTypes.CRIAR_SENHA_NOVA_REQUEST, alterarSenha),
+  takeLatest(AuthTypes.TOKEN_RENOVAR_REQUEST, tokenRequest),
 ]);

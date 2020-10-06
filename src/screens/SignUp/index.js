@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import { ActivityIndicator } from "react-native";
+
 import {useDispatch, useSelector} from 'react-redux';
 import {
   Container,
@@ -21,6 +23,8 @@ export default () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const {loading} = useSelector((state) => state.register);
 
   const [emailField, setEmailField] = useState('');
   const [passwordField, setPasswordField] = useState('');
@@ -46,18 +50,18 @@ export default () => {
       <BarberLogo width="100%" height="160" />
 
       <InputArea>
-        <SignInput
-          IconSvg={EmailIcon}
-          placeholder="Digite seu email"
-          value={emailField}
-          onChangeText={setEmailField}
-        />
-        <SignInput
+      <SignInput
           IconSvg={PersonIcon}
           placeholder="Digite seu nome"
           value={nomeField}
           onChangeText={setNomeField}
         />
+        <SignInput
+          IconSvg={EmailIcon}
+          placeholder="Digite seu email"
+          value={emailField}
+          onChangeText={setEmailField}
+        />        
         <SignInput
           IconSvg={LookIcon}
           placeholder="Digite sua Senha"
@@ -67,7 +71,11 @@ export default () => {
         />
 
         <CustomButton onPress={handleSignUpClick}>
-          <CustomButtonText>CADASTRAR</CustomButtonText>
+          <CustomButtonText>
+          {
+            loading ? <ActivityIndicator size="large" color="#ffff"/> : "CADASTRAR"
+          }          
+          </CustomButtonText>
         </CustomButton>
       </InputArea>
       <SignMessageButton onPress={handleMessageButtonClick}>

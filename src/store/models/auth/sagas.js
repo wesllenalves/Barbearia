@@ -35,6 +35,9 @@ export function* login({payload}) {
 
   const {data, status} = response;
   const {dados} = data;
+  const {dado} = data;  
+ 
+  
   switch (status) {
     case 200: // eslint-disable-next-line no-case-declarations
       
@@ -46,37 +49,46 @@ export function* login({payload}) {
         }
       };
       setLoginLocal(dados.access_token);     
-      yield put(loginSucesso(dados.access_token, dados.usuario, dados.expires_in));
-      //RootNavigation.navigate('SignIn');      
+     yield put(loginSucesso(dados.access_token, dados.usuario, dados.expires_in));
+      RootNavigation.navigate('SignIn');      
       break;
 
     case 401:
-      /* ToastAndroid.showWithGravityAndOffset(      
-        `${Object.keys(dados).map((item, index) => (
-          dados[item]+'\n'
-        ))}`,
+      ToastAndroid.showWithGravityAndOffset(
+        data.erro,
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         25,
         50
-      ); */
+      );
       yield put(loginFailure());
       break;
 
     case 403:
-      /* ToastAndroid.showWithGravityAndOffset(      
-        `${Object.keys(dados).map((item, index) => (
-          dados[item]+'\n'
-        ))}`,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        25,
-        50
-      ); */
+     
+        ToastAndroid.showWithGravityAndOffset(      
+          `${Object.keys(erro).map((item, index) => (
+            erro[item]+'\n'
+          ))}`,
+          ToastAndroid.LONG,
+          ToastAndroid.TOP,
+          25,
+          50
+        );
+      
       yield put(loginFailure());
       break;
 
-    default:      
+    default: 
+    ToastAndroid.showWithGravityAndOffset(      
+      `${Object.keys(dados).map((item, index) => (
+        dados[item]+'\n'
+      ))}`,
+      ToastAndroid.LONG,
+      ToastAndroid.TOP,
+      25,
+      50
+    );     
       yield put(loginFailure());
   } 
 }

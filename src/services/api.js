@@ -3,6 +3,7 @@ import  AsyncStorage  from '@react-native-community/async-storage';
 
 const http = axios.create({
   baseURL: 'https://apibarbearia.herokuapp.com/api/v1/',
+  timeout: 2000,
 });
 
 

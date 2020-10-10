@@ -31,7 +31,8 @@ export default () => {
     const checkToken = async () => {
       const token = await AsyncStorage.getItem('token');
       if (token) {        //validar token
-        dispatch(tokenRequest());
+        //dispatch(tokenRequest());
+        navigation.navigate('MainTab');
       } else {
         navigation.navigate('SignIn');
       }

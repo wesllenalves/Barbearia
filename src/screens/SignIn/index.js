@@ -24,13 +24,20 @@ export default () => {
   const [emailField, setEmailField] = useState('');
   const [passwordField, setPasswordField] = useState('');
   const [token, setToken] = useState();
+  const [carregandor, setCarregandor ] = useState(false);
 
   const user = useSelector((state) => state.user);
-  const {loading} = useSelector((state) => state.auth);
+  const {loading, carregando} = useSelector((state) => state.auth);
  
+  const teste = true;
 
+  useEffect(() => {
+    setCarregandor(loading);
+  },[loading])
+
+  console.log(carregandor)
   const handleSignClick = () => {
-    if (!emailField || !passwordField) {
+    if (/* !emailField || !passwordField */ teste === false) {
       alert('preencha todos os campos!');
     } else {
       dispatch(loginRequest((email_cpf = emailField), (senha = passwordField)));
@@ -66,7 +73,7 @@ export default () => {
           <CustomButtonText>
           {
             loading ? <ActivityIndicator size="large" color="#ffff"/> : "LOGIN"
-          }          
+          }           
           </CustomButtonText>
         </CustomButton>
       </InputArea>
